@@ -1,0 +1,63 @@
+<tool id="data_manager_fgenesh_download" name="FGENESH download" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" tool_type="manage_data" profile="20.01">
+    <description>Download FGENESH database</description>
+    <macros>
+	 <token name="@VERSION_SUFFIX@">1</token>
+	 <token name="@TOOL_VERSION@">1.0.0</token>
+    </macros>
+    <command detect_errors="exit_code"><![CDATA[
+python '$__tool_directory__/data_manager_fgenesh_download.py'
+    --database '$db.database'
+    --build '$db.build'
+    --json '$out_file'
+    ]]></command>
+    <inputs>
+        <conditional name="db">
+            <param name="database" type="select" label="Type of database to download">
+                <option value="nr" selected="true">Non-redundant protein database</option>
+                <option value="par">Parameter filese</option>
+                <option value="matrix">Matrix files</option>
+            </param>
+            <when value="nr">
+                <param name="build" type="select" label="Build for Non-redundant protein database">
+                    <option value="ce" selected="true">C. Elegans</option>
+                </param>
+            </when>
+            <when value="par">
+                <param name="build" type="select" label="Build for parameter files">
+                    <option value="mammals">Mammals</option>
+                    <option value="non_mammals">Non Mammals</option>
+                </param>
+            </when>
+            <when value="matrix">
+                <param name="build" type="select" label="Build for matrix files">
+                    <option value="ce" selected="true">C. elegans</option>
+                </param>
+            </when>
+        </conditional>
+    </inputs>
+    <outputs>
+        <data name="out_file" format="data_manager_json" label="${tool.name}" />
+    </outputs>
+    <tests>
+        <test expect_num_outputs="1">
+            <conditional name="db">
+                <param name="database" value="nr"/>
+                <param name="build" value="ce"/>
+            </conditional>
+            <output name="out_file">
+                <assert_contents>
+                    <has_text text="fgenesh_nr"/>
+                    <has_text text="C elegans"/>
+                    <has_text text="nr/nr_ce"/>
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+    <help>
+This tool downloads the FGENESH databases.
+
+    </help>
+    <citations>
+        <citation type="doi">10.1371/journal.pcbi.1003153</citation>
+    </citations>
+</tool>

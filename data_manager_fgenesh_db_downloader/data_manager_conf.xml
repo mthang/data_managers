@@ -1,0 +1,44 @@
+<data_managers>
+    <data_manager tool_file="data_manager/data_manager_fgenesh_download.xml" id="data_manager_fgenesh_download" >
+        <data_table name="fgenesh_nr">  <!-- Defines a Data Table to be modified. -->
+            <output> <!-- Handle the output of the Data Manager Tool -->
+                <column name="value" />  <!-- columns that are going to be specified by the Data Manager Tool -->
+                <column name="name" />  <!-- columns that are going to be specified by the Data Manager Tool -->
+                <column name="path" output_ref="out_file" >
+                    <move type="directory">
+                        <source>${path}</source>
+			<target base="${GALAXY_DATA_MANAGER_DATA_PATH}">fgenesh/data/nr/${value}</target>
+                    </move>
+                    <value_translation>${GALAXY_DATA_MANAGER_DATA_PATH}/fgenesh/data/nr/${value}</value_translation>
+                </column>
+            </output>
+        </data_table>
+        <data_table name="fgenesh_par">  <!-- Defines a Data Table to be modified. -->
+            <output> <!-- Handle the output of the Data Manager Tool -->
+                <column name="value" />  <!-- columns that are going to be specified by the Data Manager Tool -->
+                <column name="name" />  <!-- columns that are going to be specified by the Data Manager Tool -->
+                <column name="path" output_ref="out_file" >
+                    <move type="directory">
+                        <source>${path}</source>
+                        <target base="${GALAXY_DATA_MANAGER_DATA_PATH}">fgenesh/data/par/${value}</target>
+                    </move>
+                    <value_translation>${GALAXY_DATA_MANAGER_DATA_PATH}/fgenesh/data/par/${value}</value_translation>
+                </column>
+            </output>
+        </data_table>
+        <data_table name="fgenesh_matrix">  <!-- Defines a Data Table to be modified. -->
+            <output> <!-- Handle the output of the Data Manager Tool -->
+                <column name="value" />  <!-- columns that are going to be specified by the Data Manager Tool -->
+                <column name="name" />  <!-- columns that are going to be specified by the Data Manager Tool -->
+                <column name="path" output_ref="out_file" >
+                    <move type="file" relativize_symlinks="False">
+                        <source>${path}</source>
+                        <target base="${GALAXY_DATA_MANAGER_DATA_PATH}">fgenesh/data/matrix/${value}</target>
+                    </move>
+                    <value_translation>${GALAXY_DATA_MANAGER_DATA_PATH}/fgenesh/data/matrix/${value}</value_translation>
+                </column>
+            </output>
+        </data_table>
+    </data_manager>
+</data_managers>
+

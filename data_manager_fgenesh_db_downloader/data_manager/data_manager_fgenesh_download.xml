@@ -48,7 +48,7 @@ python '$__tool_directory__/data_manager_fgenesh_download.py'
                 <assert_contents>
                     <has_text text="fgenesh_nr"/>
                     <has_text text="C elegans"/>
-                    <has_text text="nr/nr_ce"/>
+                    <has_text text="nr/ce"/>
                 </assert_contents>
             </output>
         </test>

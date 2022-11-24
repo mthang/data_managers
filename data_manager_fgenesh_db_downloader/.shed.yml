@@ -1,0 +1,9 @@
+name: data_manager_fgenesh
+owner: mike
+description: "FGENESH database downloader"
+long_description: |
+    "FGENESH: Genome Annotation"
+remote_repository_url: https://github.com/mthang/data_managers/tree/main/data_manager_fgenesh_db_downloader
+type: unrestricted
+categories:
+- Data Managers

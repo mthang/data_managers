@@ -174,6 +174,10 @@ def download_fgenesh_db(data_tables, table_name, database, build,  target_dp):
                 name=FGENESH_DATA[database][build],
                 path=str(build_target_dp)))
     elif args.database == "nr":
+        add_data_table_entry(
+            data_tables,
+            table_name,
+            dict(
                 value="%s-%s-%s" % (database, build, date.today().strftime("%d%m%Y")),
                 name=FGENESH_DATA[database][build],
                 path=str(build_target_dp)))

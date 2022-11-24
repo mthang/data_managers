@@ -1,5 +1,5 @@
 <data_managers>
-    <data_manager tool_file="data_manager/data_manager_fgenesh_download.xml" id="data_manager_fgenesh_download" >
+    <data_manager tool_file="data_manager/data_manager_fgenesh_download.xml" id="data_manager_fgenesh" >
         <data_table name="fgenesh_nr">  <!-- Defines a Data Table to be modified. -->
             <output> <!-- Handle the output of the Data Manager Tool -->
                 <column name="value" />  <!-- columns that are going to be specified by the Data Manager Tool -->

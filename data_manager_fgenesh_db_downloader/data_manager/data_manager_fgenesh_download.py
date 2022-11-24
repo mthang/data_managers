@@ -19,26 +19,27 @@ except ImportError:
 FGENESH_DATA = {
     "nr": {
         "ce": "C elegans",
-        "DEMO": "Demo for FGENESH"
     },
     "par": {
         "mammals": "Parameter file for Mammals",
         "non_mammals": "Parameter file for Non Mammals",
     },
     "matrix": {
-        "full": {
-            "C_elegans_nGASP": "Matrix (full) for C elegans",
-            "map_ko_uniref90": "Matrix (full) for KEGG Orthogroups (KOs) from UniRef90",
-            "map_pfam_name": "Matrix (full) between Pfam domains ids and names"
-        }
+        "C_elegans_nGASP": "Matrix for C elegans",
     }
 }
 
 FGENESH_DATA_URL = {
-        "ce": "http://mike-sandpit.qfab.org:8080/",
-        "mammals": "http://mike-sandpit.qfab.org:8080/",
-        "non_mammals": "http://mike-sandpit.qfab.org:8080/",
-        "matrix": "http://mike-sandpit.qfab.org:8080/"
+    "nr" : {
+        "ce": "http://mike-sandpit.qfab.org:8080/NR/nr_ce",
+    },
+    "par": {
+        "mammals": "http://mike-sandpit.qfab.org:8080/PAR/mammals.par",
+        "non_mammals": "http://mike-sandpit.qfab.org:8080/PAR/non_mammals.par",
+    },
+    "matrix": {
+        "ce":"http://mike-sandpit.qfab.org:8080/MATRIX/C_elegans_nGASP",
+    }
 }
 
 def url_download(url, fname, workdir):
@@ -63,34 +64,6 @@ def url_download(url, fname, workdir):
     finally:
         if src:
             src.close()
-
-def remote_dataset(dataset, outjson):
-
-    with open(outjson) as fh:
-        params = json.load(fh)
-
-    workdir = params['output_data'][0]['extra_files_path']
-    os.mkdir(workdir)
-    url_download(FILE2TAXURL[dataset], dataset + ".taxonomy", workdir)
-
-    data_manager_json = {"data_tables": {}}
-    data_manager_entry = {}
-    data_manager_entry['value'] = dataset
-    data_manager_entry['name'] = FILE2NAME[dataset]
-    data_manager_entry['path'] = dataset + ".taxonomy"
-    data_manager_entry['taxlevels'] = FILE2TAXLEVELS.get(dataset, DEFAULT_TAXLEVELS)
-    data_manager_json["data_tables"]["dada2_taxonomy"] = data_manager_entry
-
-    if FILE2SPECIESURL.get(dataset, False):
-        url_download(FILE2SPECIESURL[dataset], dataset + ".species", workdir)
-        data_manager_entry = {}
-        data_manager_entry['value'] = dataset
-        data_manager_entry['name'] = FILE2NAME[dataset]
-        data_manager_entry['path'] = dataset + ".species"
-        data_manager_json["data_tables"]["dada2_species"] = data_manager_entry
-
-    with open(outjson, 'w') as fh:
-        json.dump(data_manager_json, fh, sort_keys=True)
 
 
 # Utility functions for interacting with Galaxy JSON
@@ -160,7 +133,7 @@ def add_data_table_entry(d, table, entry):
         raise Exception("add_data_table_entry: no table '%s'" % table)
 
 
-def download_fgenesh_db(data_tables, table_name, database, build, version, target_dp):
+def download_fgenesh_db(data_tables, table_name, database, build,  target_dp):
     """Download FGENESH database
 
     Creates references to the specified file(s) on the Galaxy
@@ -181,37 +154,29 @@ def download_fgenesh_db(data_tables, table_name, database, build, version, targe
     db_target_dp = target_dp / Path(database)
     db_dp = db_target_dp / Path(database)
     build_target_dp = db_target_dp / Path(build)
-    # launch tool to get db
-    #cmd = "humann_databases --download %s %s %s --update-config no" % (
-    #    database,
-    #    build,
-    #    db_target_dp)
-    #subprocess.check_call(cmd, shell=True)
-    url_download(FGENESH_DATA_URLL[build], build + ".par", db_target_dp)
+    
+    if database == "nr":
+        url_download(FGENESH_DATA_URL[database][build], "nr_" + build, db_target_dp)
+    elif database == "par":
+        url_download(FGENESH_DATA_URL[database][build], build + ".par", db_target_dp)
+    elif database == "matrix":
+        url_download(FGENESH_DATA_URL[database][build], build + "_nGASP", db_target_dp)
 
     # move db
     db_dp.rename(build_target_dp)
     # add details to data table
-    if database != "fgenesh_matrix":
+    if database != "nr":
         add_data_table_entry(
             data_tables,
             table_name,
             dict(
-                value="%s-%s-%s-%s" % (database, build, version, date.today().strftime("%d%m%Y")),
+                value="%s-%s-%s" % (database, build, date.today().strftime("%d%m%Y")),
                 name=FGENESH_DATA[database][build],
-                dbkey=version,
                 path=str(build_target_dp)))
-    elif args.database == "fgenesh_matrix":
-        for x in build_target_dp.iterdir():
-            name = str(x.stem).split('.')[0]
-            add_data_table_entry(
-                data_tables,
-                table_name,
-                dict(
-                    value="%s-%s-%s-%s-%s%s" % (database, build, name, version, date.today().strftime("%d%m%Y"), x.suffix),
-                    name=FGENESH_DATA["fgenesh_matrix"][build][name],
-                    dbkey=version,
-                    path=str(x)))
+    elif args.database == "nr":
+                value="%s-%s-%s" % (database, build, date.today().strftime("%d%m%Y")),
+                name=FGENESH_DATA[database][build],
+                path=str(build_target_dp)))
 
 
 if __name__ == "__main__":
@@ -221,7 +186,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Download HUMAnN database')
     parser.add_argument('--database', help="Database name")
     parser.add_argument('--build', help="Build of the database")
-    parser.add_argument('--version', help="version")
     parser.add_argument('--json', help="Path to JSON file")
     args = parser.parse_args()
     print("args   : %s" % args)
@@ -251,7 +215,6 @@ if __name__ == "__main__":
         table_name,
         args.database,
         args.build,
-        args.version,
         target_dp)
 
     # Write output JSON

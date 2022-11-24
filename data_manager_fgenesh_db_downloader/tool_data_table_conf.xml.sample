@@ -1,14 +1,14 @@
 <tables>
     <table name="fgenesh_nr" comment_char="#">
-        <columns>value, name, dbkey, path</columns>
+        <columns>value, name, path</columns>
         <file path="tool-data/fgenesh_nr.loc" />
     </table>
     <table name="fgenesh_par" comment_char="#">
-        <columns>value, name, dbkey, path</columns>
+        <columns>value, name, path</columns>
         <file path="tool-data/fgenesh_par.loc" />
     </table>
     <table name="fgenesh_matrix" comment_char="#">
-        <columns>value, name, dbkey, path</columns>
+        <columns>value, name, path</columns>
         <file path="tool-data/fgenesh_matrix.loc" />
     </table>
 </tables>

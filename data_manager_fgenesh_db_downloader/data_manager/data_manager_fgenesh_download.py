@@ -163,7 +163,7 @@ def download_fgenesh_db(data_tables, table_name, database, build,  target_dp):
         url_download(FGENESH_DATA_URL[database][build], build + "_nGASP", db_target_dp)
 
     # move db
-    db_dp.rename(build_target_dp)
+    #db_dp.rename(build_target_dp)
     # add details to data table
     if database != "nr":
         add_data_table_entry(

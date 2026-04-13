@@ -1,0 +1,10 @@
+{
+  "data_tables": {
+    "tiberius": {
+      "value": "Chlorophyta_unmasked",
+      "name": "Chlorophyta (Green Algae) - Unmasked (2026-01-26)",
+      "path": "Chlorophyta/unmasked",
+      "type": "unmasked"
+    }
+  }
+}

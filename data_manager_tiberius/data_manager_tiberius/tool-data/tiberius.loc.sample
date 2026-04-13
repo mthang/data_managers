@@ -1,0 +1,8 @@
+# consists of 4 tab separated columns:
+# - value identifier
+# - name the name shown in the tool form
+# - type softmasked/unmasked
+# - path the directory containing the reference data
+# 
+# example:
+# Chlorophyta_unmasked    Chlorophyta (Green Algae) - Unmasked (2026-01-26)       unmasked        /tmp/tmpbtwefN/tmpiplugx/tmpydhEfm/database/data_manager_tool-datacoy8bz/tiberius/Chlorophyta_unmasked

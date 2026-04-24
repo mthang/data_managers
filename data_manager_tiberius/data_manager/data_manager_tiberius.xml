@@ -161,9 +161,9 @@ The following species groups are available with their respective model versions:
 
 **Data Source**
 
-Model weights are downloaded from the Tiberius model repository at:
+Model weights are downloaded from the Tiberius model repository (see README_ for more information):
 
-https://bioinf.uni-greifswald.de/bioinf/tiberius/models/
+.. _README: https://github.com/Gaius-Augustus/Tiberius/blob/main/model_cfg/README.md
 
 
     </help>
